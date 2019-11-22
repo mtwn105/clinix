@@ -1,0 +1,176 @@
+create database clinix;
+
+use clinix;
+
+-- PATIENT TABLE
+
+CREATE  TABLE `clinix`.`patient` (
+  `user_id` VARCHAR(10) NOT NULL ,
+  `first_name` TEXT(50) NOT NULL ,
+  `last_name` TEXT(50) NOT NULL ,
+  `age` INT(2) NOT NULL ,
+  `gender` TEXT(10) ,
+  `dob` TEXT(10) NULL ,
+  `contact_number` TEXT(10) NOT NULL ,
+  `alt_contact_number` TEXT(10) NULL ,
+  `email_id` TEXT(50) NOT NULL ,
+  `password` TEXT(15) NOT NULL ,
+  `address_line_1` TEXT(100) NOT NULL ,
+  `address_line_2` TEXT(100) NULL ,
+  `city` TEXT(50) NOT NULL ,
+  `state` TEXT(50) NOT NULL ,
+  `zip_code` BIGINT(10) NOT NULL ,
+  `approve` VARCHAR(6) NOT NULL, 
+  PRIMARY KEY (`user_id`) );
+
+
+-- MEDICARE TABLE
+
+
+CREATE  TABLE `clinix`.`medicare_services` (
+  `medicare_service_id` BIGINT(10) NOT NULL ,
+  `medicare_service` TEXT(50) NOT NULL ,
+  `service_description` TEXT(200) NOT NULL ,
+  `amount` BIGINT(10) NOT NULL ,
+  PRIMARY KEY (`medicare_service_id`) );
+
+-- DOCTOR TABLE
+CREATE  TABLE `clinix`.`doctor` (
+  `doctor_id` VARCHAR(10) NOT NULL ,
+  `first_name` TEXT(50) NOT NULL ,
+  `last_name` TEXT(50) NOT NULL ,
+  `age` INT(2) NOT NULL ,
+  `gender` TEXT(10) NULL ,
+  `dob` TEXT(10) NULL ,
+  `contact_number` TEXT(10) NOT NULL ,
+  `alt_contact_number` TEXT(10) NULL ,
+  `email_id` TEXT(50) NOT NULL ,
+  `password` TEXT(15) NOT NULL ,
+  `address_line_1` TEXT(100) NOT NULL ,
+  `address_line_2` TEXT(100) NULL ,
+  `city` TEXT(50) NOT NULL ,
+  `state` TEXT(50) NOT NULL ,
+  `zipcode` BIGINT(10) NOT NULL ,
+  `degree` TEXT(50) NOT NULL ,
+  `speciality` TEXT(50) NOT NULL ,
+  `work_hours` TEXT(20) NOT NULL ,
+  `hospital_name` TEXT(100) NOT NULL ,
+  `medicare_service_id` BIGINT(10) NOT NULL ,
+  PRIMARY KEY (`doctor_id`) ,
+  INDEX `fk_medicare_service_id_idx` (`medicare_service_id` ASC) ,
+  CONSTRAINT `fk_medicare_service_id`
+    FOREIGN KEY (`medicare_service_id` )
+    REFERENCES `clinix`.`medicare_services` (`medicare_service_id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+
+-- ADMIN TABLE
+
+create table admin(
+ admin_id varchar(10) NOT NULL,
+ first_name text(50) NOT NULL,
+ last_name text(50) NOT NULL,
+ age int(2),
+ gender text(10),
+ dob text(10),
+ contact_number text(10) NOT NULL,
+ alt_contact_number text(10),
+ email_id text(50) NOT NULL,
+ pwd text(15) NOT NULL,
+ PRIMARY KEY (admin_id)
+);
+
+-- AGENT TABLE
+
+create table agent(
+ agent_id varchar(10) NOT NULL,
+ first_name text(50) NOT NULL,
+ last_name text(50) NOT NULL,
+ age int(2),
+ gender text(10),
+ dob text(10),
+ contact_number text(10) NOT NULL,
+ alt_contact_number text(10),
+ email_id text(50) NOT NULL,
+ pwd text(15) NOT NULL,
+ address_line1 text(100) NOT NULL,
+ address_line2 text(100) NOT NULL,
+ city text(50) NOT NULL,
+ state text(50) NOT NULL,
+ zip_code text(10) NOT NULL, 
+ PRIMARY KEY (agent_id)
+);
+
+-- MEDICAL TEST TABLE
+
+CREATE  TABLE `clinix`.`medical_test_history` (
+  `report_id`    INT(10) NOT NULL AUTO_INCREMENT,
+  `customer_id`  VARCHAR(10) NOT NULL ,
+  `doctor_id`    VARCHAR(10) NOT NULL ,
+  `medicare_service_id` BIGINT(10) NOT NULL ,
+  `agent_id` VARCHAR(10) NOT NULL ,
+  `service_date` TEXT(10) NOT NULL ,
+  `test_result_date` TEXT(10) NOT NULL ,
+  `diag1_actual_value` INT(10),
+  `diag1_normal_range` INT(10),
+  `diag2_actual_value` INT(10),
+  `diag2_normal_range` INT(10),
+  `diag3_actual_value` INT(10),
+  `diag3_normal_range` INT(10),
+  `diag4_actual_value` INT(10),
+  `diag4_normal_range` INT(10),
+  `diag5_actual_value` INT(10),
+  `diag5_normal_range` INT(10),
+  `diag6_actual_value` INT(10),
+  `diag6_normal_range` INT(10),
+  `doctors_comments`TEXT(300)  NOT NULL,
+  `other_info` TEXT(300) ,
+   PRIMARY KEY(`report_id`),
+   CONSTRAINT `customer_id`
+   FOREIGN KEY (`customer_id`) REFERENCES `clinix`.`patient`(`user_id`),
+   CONSTRAINT `doctor_id`
+   FOREIGN KEY (`doctor_id`) REFERENCES `clinix`.`doctor`(`doctor_id`),
+   CONSTRAINT `medicare_service_id`
+   FOREIGN KEY (`medicare_service_id`) REFERENCES `clinix`.`medicare_services`(`medicare_service_id`),
+   CONSTRAINT `agent_id`
+   FOREIGN KEY (`agent_id`) REFERENCES `clinix`.`agent`(`agent_id`));
+
+
+-- FEEDBACK TABLE
+
+CREATE  TABLE `clinix`.`feedback` (
+  `assessment_id` INT(100) NOT NULL ,
+  `question_1` TEXT(200) NOT NULL ,
+  `question_2` TEXT(200) NOT NULL ,
+  `question_3` TEXT(200) NOT NULL ,
+  `question_4` TEXT(200) NOT NULL ,
+  `question_5` TEXT(200) NOT NULL ,
+  `question_6` TEXT(200) NOT NULL ,
+  `question_7` TEXT(200) NOT NULL ,
+  `question_8` TEXT(200) NOT NULL ,
+  `question_9` TEXT(200) NOT NULL ,
+  `question_10` TEXT(200) NOT NULL ,
+  PRIMARY KEY (`assessment_id`) );
+
+-- USER FEEDBACK TABLE
+
+CREATE  TABLE `clinix`.`user_feedback` (
+  `user_id`       VARCHAR(10) NOT NULL,
+  `assessment_id` INT(100) NOT NULL ,
+  `rating_que_1` TEXT(200) NOT NULL ,
+  `rating_que_2` TEXT(200) NOT NULL ,
+  `rating_que_3` TEXT(200) NOT NULL ,
+  `rating_que_4` TEXT(200) NOT NULL ,
+  `rating_que_5` TEXT(200) NOT NULL ,
+  `rating_que_6` TEXT(200) NOT NULL ,
+  `rating_que_7` TEXT(200) NOT NULL ,
+  `rating_que_8` TEXT(200) NOT NULL ,
+  `rating_que_9` TEXT(200) NOT NULL ,
+  `rating_que_10` TEXT(200) NOT NULL ,
+  `assessement_date` DATE NOT NULL,
+   CONSTRAINT `user_feedback_user_id`
+   FOREIGN KEY (`user_id`) REFERENCES `clinix`.`patient`(`user_id`),
+   CONSTRAINT `assessment_id`
+   FOREIGN KEY (`assessment_id`) REFERENCES `clinix`.`feedback`(`assessment_id`));
+
