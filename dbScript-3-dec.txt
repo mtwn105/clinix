@@ -1,0 +1,417 @@
+delimiter $$
+
+CREATE TABLE `agent` (
+  `agent_id` bigint(10) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `age` bigint(2) NOT NULL,
+  `gender` varchar(10) DEFAULT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `contact_number` bigint(10) NOT NULL,
+  `alt_contact_number` bigint(10) DEFAULT NULL,
+  `email_id` varchar(50) NOT NULL,
+  `password` varchar(200) NOT NULL,
+  `address_line_1` varchar(100) NOT NULL,
+  `address_line_2` varchar(100) DEFAULT NULL,
+  `city` varchar(50) NOT NULL,
+  `state` varchar(50) NOT NULL,
+  `zipcode` bigint(10) NOT NULL,
+  `commission` bigint(10) DEFAULT NULL,
+  PRIMARY KEY (`agent_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9857 DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `appointment` (
+  `appointment_id` bigint(10) NOT NULL AUTO_INCREMENT,
+  `doctor_id` bigint(10) NOT NULL,
+  `agent_id` bigint(10) NOT NULL,
+  `time_slot` bigint(10) NOT NULL,
+  `date_of_appointment` date NOT NULL,
+  `status` varchar(10) NOT NULL,
+  PRIMARY KEY (`appointment_id`),
+  KEY `fk_doctor_id_idx` (`doctor_id`),
+  KEY `fk_agent_id_idx` (`agent_id`),
+  CONSTRAINT `fk_a_id` FOREIGN KEY (`agent_id`) REFERENCES `agent` (`agent_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_d_id` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`doctor_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `doctor` (
+  `doctor_id` bigint(10) NOT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `age` bigint(2) NOT NULL,
+  `gender` varchar(10) DEFAULT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `contact_number` bigint(10) NOT NULL,
+  `alt_contact_number` bigint(10) DEFAULT NULL,
+  `email_id` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `address_line_1` varchar(100) NOT NULL,
+  `address_line_2` varchar(100) DEFAULT NULL,
+  `city` varchar(50) NOT NULL,
+  `state` varchar(50) NOT NULL,
+  `zipcode` bigint(10) NOT NULL,
+  `degree` varchar(50) NOT NULL,
+  `speciality` varchar(50) NOT NULL,
+  `work_hours` varchar(30) NOT NULL,
+  `hospital_name` varchar(100) NOT NULL,
+  `security_question` varchar(60) NOT NULL,
+  `security_question_answer` varchar(50) NOT NULL,
+  `medicare_services` bigint(10) NOT NULL,
+  `approve` varchar(6) NOT NULL,
+  PRIMARY KEY (`doctor_id`),
+  KEY `fk_medicare_services_id_idx` (`medicare_services`),
+  CONSTRAINT `fk_medicare_services_id` FOREIGN KEY (`medicare_services`) REFERENCES `medicare_services` (`medicare_service_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `user_role` (
+  `ur_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ur_us_id` int(11) DEFAULT NULL,
+  `ur_ro_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ur_id`),
+  KEY `ur_us_fk_idx` (`ur_us_id`),
+  KEY `ur_ro_fk_idx` (`ur_ro_id`),
+  CONSTRAINT `ur_ro_fk` FOREIGN KEY (`ur_ro_id`) REFERENCES `role` (`ro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `ur_us_fk` FOREIGN KEY (`ur_us_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `user_feedback` (
+  `user_id` bigint(10) NOT NULL,
+  `asessment_id` bigint(10) NOT NULL AUTO_INCREMENT,
+  `rating_que_1` varchar(200) NOT NULL,
+  `rating_que_2` varchar(200) NOT NULL,
+  `rating_que_3` varchar(200) NOT NULL,
+  `rating_que_4` varchar(200) NOT NULL,
+  `rating_que_5` varchar(200) NOT NULL,
+  `rating_que_6` varchar(200) NOT NULL,
+  `rating_que_7` varchar(200) NOT NULL,
+  `rating_que_8` varchar(200) NOT NULL,
+  `rating_que_9` varchar(200) NOT NULL,
+  `rating_que_10` varchar(200) NOT NULL,
+  `assessment_date` date NOT NULL,
+  PRIMARY KEY (`asessment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
+  `first_name` varchar(45) NOT NULL,
+  `last_name` varchar(45) NOT NULL,
+  `age` int(2) NOT NULL,
+  `gender` varchar(45) NOT NULL,
+  `date_of_birth` date NOT NULL,
+  `contact` bigint(10) NOT NULL,
+  `alt_contact` bigint(10) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(300) NOT NULL,
+  `security_que` varchar(100) NOT NULL,
+  `security_ans` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `role` (
+  `ro_id` int(11) NOT NULL,
+  `ro_name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`ro_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `patient` (
+  `patient_id` bigint(10) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `age` int(2) NOT NULL,
+  `gender` varchar(6) DEFAULT NULL,
+  `date_of_birth` date NOT NULL,
+  `contact_number` bigint(10) NOT NULL,
+  `alt_contact_number` bigint(10) DEFAULT NULL,
+  `email_id` varchar(50) NOT NULL,
+  `password` varchar(250) NOT NULL,
+  `address_line_1` varchar(100) NOT NULL,
+  `address_line_2` varchar(100) DEFAULT NULL,
+  `city` varchar(50) NOT NULL,
+  `state` varchar(50) NOT NULL,
+  `zipcode` bigint(10) NOT NULL,
+  `security_question` varchar(60) NOT NULL,
+  `security_question_answer` varchar(50) NOT NULL,
+  `approve` varchar(6) NOT NULL,
+  PRIMARY KEY (`patient_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6613 DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `medicare_services` (
+  `medicare_service_id` bigint(10) NOT NULL AUTO_INCREMENT,
+  `medicare_service` varchar(50) NOT NULL,
+  `service_description` varchar(500) NOT NULL,
+  `amount` bigint(10) NOT NULL,
+  PRIMARY KEY (`medicare_service_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `medical_test_history` (
+  `report_id` bigint(10) NOT NULL,
+  `customer_id` bigint(10) NOT NULL,
+  `doctor_id` bigint(10) NOT NULL,
+  `medicare_services_id` bigint(10) NOT NULL,
+  `agent_id` bigint(10) NOT NULL,
+  `service_date` date NOT NULL,
+  `test_result_date` date NOT NULL,
+  `diag_actual_value_1` bigint(10) NOT NULL,
+  `diag_normal_range_1` bigint(10) NOT NULL,
+  `diag_actual_value_2` bigint(10) DEFAULT NULL,
+  `diag_normal_range_2` bigint(10) DEFAULT NULL,
+  `diag_actual_value_3` bigint(10) DEFAULT NULL,
+  `diag_normal_range_3` bigint(10) DEFAULT NULL,
+  `diag_actual_value_4` bigint(10) DEFAULT NULL,
+  `diag_normal_range_4` bigint(10) DEFAULT NULL,
+  `diag_actual_value_5` bigint(10) DEFAULT NULL,
+  `diag_normal_range_5` bigint(10) DEFAULT NULL,
+  `diag_actual_value_6` bigint(10) DEFAULT NULL,
+  `diag_normal_range_6` bigint(10) DEFAULT NULL,
+  `doctor_comments` varchar(300) DEFAULT NULL,
+  `other_info` varchar(300) NOT NULL,
+  PRIMARY KEY (`report_id`),
+  KEY `fk_customer_id_idx` (`customer_id`),
+  KEY `fk_doctor_id_idx` (`doctor_id`),
+  KEY `fk_medicare_services_id_idx` (`medicare_services_id`),
+  KEY `fk_agent_id_idx` (`agent_id`),
+  CONSTRAINT `fk_agent_id` FOREIGN KEY (`agent_id`) REFERENCES `agent` (`agent_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_customer_id` FOREIGN KEY (`customer_id`) REFERENCES `patient` (`patient_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_doctor_id` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`doctor_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_medicare_service_id` FOREIGN KEY (`medicare_services_id`) REFERENCES `medicare_services` (`medicare_service_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `feedback` (
+  `question_id` bigint(10) NOT NULL AUTO_INCREMENT,
+  `question` varchar(200) NOT NULL,
+  PRIMARY KEY (`question_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `admin` (
+  `admin_id` bigint(10) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `age` bigint(2) NOT NULL,
+  `gender` varchar(10) NOT NULL,
+  `date_of_birth` date NOT NULL,
+  `contact_number` bigint(10) NOT NULL,
+  `alt_contact_number` bigint(10) DEFAULT NULL,
+  `email_id` varchar(50) NOT NULL,
+  `password` varchar(300) NOT NULL,
+  `security_question` varchar(60) NOT NULL,
+  `security_question_answer` varchar(50) NOT NULL,
+  PRIMARY KEY (`admin_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7995 DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `doctor` (
+  `doctor_id` bigint(10) NOT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `age` bigint(2) NOT NULL,
+  `gender` varchar(10) DEFAULT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `contact_number` bigint(10) NOT NULL,
+  `alt_contact_number` bigint(10) DEFAULT NULL,
+  `email_id` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `address_line_1` varchar(100) NOT NULL,
+  `address_line_2` varchar(100) DEFAULT NULL,
+  `city` varchar(50) NOT NULL,
+  `state` varchar(50) NOT NULL,
+  `zipcode` bigint(10) NOT NULL,
+  `degree` varchar(50) NOT NULL,
+  `speciality` varchar(50) NOT NULL,
+  `work_hours` varchar(30) NOT NULL,
+  `hospital_name` varchar(100) NOT NULL,
+  `security_question` varchar(60) NOT NULL,
+  `security_question_answer` varchar(50) NOT NULL,
+  `medicare_services` bigint(10) NOT NULL,
+  `approve` varchar(6) NOT NULL,
+  PRIMARY KEY (`doctor_id`),
+  KEY `fk_medicare_services_id_idx` (`medicare_services`),
+  CONSTRAINT `fk_medicare_services_id` FOREIGN KEY (`medicare_services`) REFERENCES `medicare_services` (`medicare_service_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `agent` (
+  `agent_id` bigint(10) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `age` bigint(2) NOT NULL,
+  `gender` varchar(10) DEFAULT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `contact_number` bigint(10) NOT NULL,
+  `alt_contact_number` bigint(10) DEFAULT NULL,
+  `email_id` varchar(50) NOT NULL,
+  `password` varchar(200) NOT NULL,
+  `address_line_1` varchar(100) NOT NULL,
+  `address_line_2` varchar(100) DEFAULT NULL,
+  `city` varchar(50) NOT NULL,
+  `state` varchar(50) NOT NULL,
+  `zipcode` bigint(10) NOT NULL,
+  `commission` bigint(10) DEFAULT NULL,
+  PRIMARY KEY (`agent_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9857 DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `appointment` (
+  `appointment_id` bigint(10) NOT NULL AUTO_INCREMENT,
+  `doctor_id` bigint(10) NOT NULL,
+  `agent_id` bigint(10) NOT NULL,
+  `time_slot` bigint(10) NOT NULL,
+  `date_of_appointment` date NOT NULL,
+  `status` varchar(10) NOT NULL,
+  PRIMARY KEY (`appointment_id`),
+  KEY `fk_doctor_id_idx` (`doctor_id`),
+  KEY `fk_agent_id_idx` (`agent_id`),
+  CONSTRAINT `fk_a_id` FOREIGN KEY (`agent_id`) REFERENCES `agent` (`agent_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_d_id` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`doctor_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `medical_test_history` (
+  `report_id` bigint(10) NOT NULL,
+  `customer_id` bigint(10) NOT NULL,
+  `doctor_id` bigint(10) NOT NULL,
+  `medicare_services_id` bigint(10) NOT NULL,
+  `agent_id` bigint(10) NOT NULL,
+  `service_date` date NOT NULL,
+  `test_result_date` date NOT NULL,
+  `diag_actual_value_1` bigint(10) NOT NULL,
+  `diag_normal_range_1` bigint(10) NOT NULL,
+  `diag_actual_value_2` bigint(10) DEFAULT NULL,
+  `diag_normal_range_2` bigint(10) DEFAULT NULL,
+  `diag_actual_value_3` bigint(10) DEFAULT NULL,
+  `diag_normal_range_3` bigint(10) DEFAULT NULL,
+  `diag_actual_value_4` bigint(10) DEFAULT NULL,
+  `diag_normal_range_4` bigint(10) DEFAULT NULL,
+  `diag_actual_value_5` bigint(10) DEFAULT NULL,
+  `diag_normal_range_5` bigint(10) DEFAULT NULL,
+  `diag_actual_value_6` bigint(10) DEFAULT NULL,
+  `diag_normal_range_6` bigint(10) DEFAULT NULL,
+  `doctor_comments` varchar(300) DEFAULT NULL,
+  `other_info` varchar(300) NOT NULL,
+  PRIMARY KEY (`report_id`),
+  KEY `fk_customer_id_idx` (`customer_id`),
+  KEY `fk_doctor_id_idx` (`doctor_id`),
+  KEY `fk_medicare_services_id_idx` (`medicare_services_id`),
+  KEY `fk_agent_id_idx` (`agent_id`),
+  CONSTRAINT `fk_agent_id` FOREIGN KEY (`agent_id`) REFERENCES `agent` (`agent_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_customer_id` FOREIGN KEY (`customer_id`) REFERENCES `patient` (`patient_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_doctor_id` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`doctor_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_medicare_service_id` FOREIGN KEY (`medicare_services_id`) REFERENCES `medicare_services` (`medicare_service_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `medicare_services` (
+  `medicare_service_id` bigint(10) NOT NULL AUTO_INCREMENT,
+  `medicare_service` varchar(50) NOT NULL,
+  `service_description` varchar(500) NOT NULL,
+  `amount` bigint(10) NOT NULL,
+  PRIMARY KEY (`medicare_service_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `patient` (
+  `patient_id` bigint(10) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `age` int(2) NOT NULL,
+  `gender` varchar(6) DEFAULT NULL,
+  `date_of_birth` date NOT NULL,
+  `contact_number` bigint(10) NOT NULL,
+  `alt_contact_number` bigint(10) DEFAULT NULL,
+  `email_id` varchar(50) NOT NULL,
+  `password` varchar(250) NOT NULL,
+  `address_line_1` varchar(100) NOT NULL,
+  `address_line_2` varchar(100) DEFAULT NULL,
+  `city` varchar(50) NOT NULL,
+  `state` varchar(50) NOT NULL,
+  `zipcode` bigint(10) NOT NULL,
+  `security_question` varchar(60) NOT NULL,
+  `security_question_answer` varchar(50) NOT NULL,
+  `approve` varchar(6) NOT NULL,
+  PRIMARY KEY (`patient_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6613 DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `role` (
+  `ro_id` int(11) NOT NULL,
+  `ro_name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`ro_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
+  `first_name` varchar(45) NOT NULL,
+  `last_name` varchar(45) NOT NULL,
+  `age` int(2) NOT NULL,
+  `gender` varchar(45) NOT NULL,
+  `date_of_birth` date NOT NULL,
+  `contact` bigint(10) NOT NULL,
+  `alt_contact` bigint(10) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(300) NOT NULL,
+  `security_que` varchar(100) NOT NULL,
+  `security_ans` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `user_feedback` (
+  `user_id` bigint(10) NOT NULL,
+  `asessment_id` bigint(10) NOT NULL AUTO_INCREMENT,
+  `rating_que_1` varchar(200) NOT NULL,
+  `rating_que_2` varchar(200) NOT NULL,
+  `rating_que_3` varchar(200) NOT NULL,
+  `rating_que_4` varchar(200) NOT NULL,
+  `rating_que_5` varchar(200) NOT NULL,
+  `rating_que_6` varchar(200) NOT NULL,
+  `rating_que_7` varchar(200) NOT NULL,
+  `rating_que_8` varchar(200) NOT NULL,
+  `rating_que_9` varchar(200) NOT NULL,
+  `rating_que_10` varchar(200) NOT NULL,
+  `assessment_date` date NOT NULL,
+  PRIMARY KEY (`asessment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `user_role` (
+  `ur_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ur_us_id` int(11) DEFAULT NULL,
+  `ur_ro_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ur_id`),
+  KEY `ur_us_fk_idx` (`ur_us_id`),
+  KEY `ur_ro_fk_idx` (`ur_ro_id`),
+  CONSTRAINT `ur_ro_fk` FOREIGN KEY (`ur_ro_id`) REFERENCES `role` (`ro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `ur_us_fk` FOREIGN KEY (`ur_us_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8$$
